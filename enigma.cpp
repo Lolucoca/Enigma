@@ -10,11 +10,13 @@ u8 ukwA[] = {4, 9, 12, 25, 0, 11, 24, 23, 21, 1, 22, 5, 2, 17, 16, 20, 14, 13, 1
 u8 ukwB[] = {24, 17, 20, 7, 16, 18, 11, 3, 15, 23, 13, 6, 14, 10, 12, 8, 4, 1, 5, 25, 2, 22, 21, 9, 0, 19};
 u8 ukwC[] = {5, 21, 15, 9, 8, 0, 14, 24, 4, 3, 17, 25, 23, 22, 6, 2, 19, 10, 20, 16, 18, 1, 13, 12, 7, 11};
 
-u8 frontPanelPosition[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25};
+u8 frontPanelPosition[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25}; //{3, 1, 13, 0, 19, 11, 8, 7, 6, 21, 25, 5, 12, 2, 14, 20, 24, 17, 18, 4, 15, 9, 23, 22, 16, 10}; //{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25};
 
-u8 rotorABreakPosition = 16;
-u8 rotorBBreakPosition = 26;
-u8 rotorCBreakPosition = 8;
+u8 rotorIBreakPosition = 16;
+u8 rotorIIBreakPosition = 5;
+u8 rotorIIIBreakPosition = 21;
+u8 rotorIVBreakPosition = 9;
+u8 rotorVBreakPosition = 25;
 
 Enigma::Enigma()
 {
@@ -49,22 +51,56 @@ u8 * selectUmkehrwalzeConfiguration(u8 config){
     }
 }
 
-void Enigma::initialize(u8 firstRotor, u8 secondRotor, u8 thirdRotor, u8 rotorAPosition, u8 rotorBPosition, u8 rotorCPosition, u8 umkehrwalze){
+u8 selectRotorBreakConfig(u8 config){
+    switch(config){
+        case 1: return rotorIBreakPosition;
+        case 2: return rotorIIBreakPosition;
+        case 3: return rotorIIIBreakPosition;
+        case 4: return rotorIVBreakPosition;
+        case 5: return rotorVBreakPosition;
+        default: return rotorIBreakPosition;
+    }
+}
+
+void Enigma::switchLetters(char A, char B){
+    frontPanelPosition[turnCharToNumber(A)] = turnCharToNumber(B);
+    frontPanelPosition[turnCharToNumber(B)] = turnCharToNumber(A);
+}
+
+void Enigma::initialize(u8 firstRotor, u8 secondRotor, u8 thirdRotor, u8 rotorAPosition, u8 rotorBPosition, u8 rotorCPosition, u8 ringSettingA, u8 ringSettingB, u8 ringSettingC, u8 umkehrwalze){
 
 
     rotorA.initialize(selectRotorConfiguration(firstRotor));
-    rotorA.setBreakPosition(rotorABreakPosition);
+    rotorA.setBreakPosition(selectRotorBreakConfig(firstRotor));
     rotorB.initialize(selectRotorConfiguration(secondRotor));
-    rotorB.setBreakPosition(rotorBBreakPosition);
+    rotorB.setBreakPosition(selectRotorBreakConfig(secondRotor));
     rotorC.initialize(selectRotorConfiguration(thirdRotor));
-    rotorC.setBreakPosition(rotorCBreakPosition);
+    rotorC.setBreakPosition(selectRotorBreakConfig(thirdRotor));
     walze.initialize(selectUmkehrwalzeConfiguration(umkehrwalze));
     panel.initialize(frontPanelPosition);
 
+
+    //qDebug() << "Rotor A";
+    for(u8 i = 0; i < 26 - ringSettingA; i++)
+        rotorA.rotate();
+
+    //qDebug() << "Rotor B";
+    for(u8 i = 0; i < 26 - ringSettingB; i++)
+        rotorB.rotate();
+
+    //qDebug() << "Rotor C";
+    for(u8 i = 0; i < 26 - ringSettingC; i++)
+        rotorC.rotate();
+
+    //qDebug() << "Rotor A";
     for(u8 i = 0; i < rotorAPosition; i++)
         rotorA.rotate();
+
+    //qDebug() << "Rotor B";
     for(u8 i = 0; i < rotorBPosition; i++)
         rotorB.rotate();
+
+    //qDebug() << "Rotor C";
     for(u8 i = 0; i < rotorCPosition; i++)
         rotorC.rotate();
 

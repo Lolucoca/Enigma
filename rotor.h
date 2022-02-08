@@ -25,6 +25,8 @@ public:
     u8 passSignal(u8 input);
     u8 reverseSignal(u8 input);
     void setBreakPosition(u8 brk);
+    u8 getRotorPosition();
+    void printRotor();
 private:
     void populateReflections();
     u8 rotorPosition[ALPHABETSIZE];
