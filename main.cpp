@@ -20,13 +20,12 @@ int main(){
     enigmaMachine.switchLetters('Q', 'Y');
     enigmaMachine.switchLetters('W', 'X');
 
+    //Rotors from right to left (3, 4, 1), initial word from right to left (RTZ), rotor spin setting from right to left (16 26 8) and umkehrwalze setting (2 = B)
+
     enigmaMachine.initialize(3, 4, 1, 25, 19, 17, 7, 25, 15, 2);
-    //AD CN ET FL GI JV KZ PU QY WX
 
 
-    //LJPQH SVDWC LYXZQ FXHIU
-
-    callEnigma(&enigmaMachine, (char*) "LJPQHSVDWCLYXZQFXHIUVWDJOBJNZXRCWEOTVNJCIONTFQNSXWISXKHJDAGDJVAKUKVMJAJHSZQQJHZOIAVZOWMSCKASRDN ");
+    callEnigma(&enigmaMachine, (char*) "LJPQHSVDWCLYXZQFXHIUVWDJOBJNZXRCWEOTVNJCIONTFQNSXWISXKHJDAGDJVAKUKVMJAJHSZQQJHZOIAVZOWMSCKASRDNXKKSRFHCXCMPJGXYIJCCKISYYSHETXVVOVDQLZYTNJXNUWKZRXUJFXMBDIBRVMJKRHTCUJQPTEEIYNYNJBEAQJCLMUODFWMARQCFOBWN ");
 
 
 }
